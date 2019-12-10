@@ -12,6 +12,7 @@
 #include "encoder/encoder.h"
 #include "temp_sensor/temp_sensor.h"
 #include "gpio.h"
+#include "tim.h"
 
 static float desired_temp = 0;
 static float current_temp = 0;
@@ -72,4 +73,6 @@ void user_main(){
 	show_current_temp_callback_timer_id = timer_register_callback(show_curr_temp_callback, 100, 0, TIMER_MODE_REPEAT);
 	timer_register_callback(enc_sw_callback, 100, 0, TIMER_MODE_REPEAT);
 
+	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 900);
 }
