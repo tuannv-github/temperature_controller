@@ -9,8 +9,8 @@
 #include "tim.h"
 #include "Src/user_code/timer/timer.h"
 #include "gpio.h"
+#include <stdbool.h>
 
-static int32_t old_pos = 0;
 static on_encoder_change_t gon_encoder_change;
 static timer_ID_t buzzer_timer_id = -1;
 static void turn_off_buzzer_callback(uint8_t* cxt){
@@ -19,8 +19,16 @@ static void turn_off_buzzer_callback(uint8_t* cxt){
 }
 
 static void encoder_callback(uint8_t *context){
-	float changed = (int32_t) htim4.Instance->CNT - old_pos;
-	old_pos = (int32_t) htim4.Instance->CNT;
+	float changed;
+	uint32_t enc = htim4.Instance->CNT;
+	if(enc > 32768) {
+		enc = 65536 - enc;
+		changed = -((float)enc);
+	}
+	else{
+		changed = enc;
+	}
+	htim4.Instance->CNT = 0;
 	changed = (changed*changed*changed*0.001 + changed*0.001);
 	if(gon_encoder_change != 0 && changed != 0){
 		gon_encoder_change(changed);
@@ -33,6 +41,7 @@ static void encoder_callback(uint8_t *context){
 
 void encoder_init(){
 	HAL_TIM_Encoder_Start_IT(&htim4,TIM_CHANNEL_ALL);
+	htim4.Instance->CNT = 0;
 	timer_register_callback(encoder_callback,10,0,TIMER_MODE_REPEAT);
 	gon_encoder_change = 0;
 }

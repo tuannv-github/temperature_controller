@@ -14,7 +14,7 @@
 #include "gpio.h"
 #include "tim.h"
 
-static float desired_temp = 0;
+static float desired_temp = 50;
 static float current_temp = 0;
 static timer_ID_t show_current_temp_callback_timer_id = -1;
 static timer_ID_t show_desired_temp_callback_timer_id = -1;
@@ -28,7 +28,7 @@ static void show_curr_temp_callback(uint8_t *context){
 static void show_desired_temp_timeout_callback(uint8_t *context){
 	timer_unregister_callback(show_desired_temp_callback_timer_id);
 	show_desired_temp_callback_timer_id = -1;
-	show_current_temp_callback_timer_id = timer_register_callback(show_curr_temp_callback, 100, 0, TIMER_MODE_REPEAT);
+	show_current_temp_callback_timer_id = timer_register_callback(show_curr_temp_callback, 1000, 0, TIMER_MODE_REPEAT);
 }
 
 void cmd_callback(float changed){
@@ -63,6 +63,24 @@ static void enc_sw_callback(uint8_t *context){
 	}
 }
 
+static void voltag_control_cb(uint8_t *cxt){
+	static float old_I_part = 0;
+	float current_temp = temp_sensor_read();
+	if(desired_temp <= current_temp-1){
+		__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 998);
+		return;
+	}
+	float err = desired_temp - current_temp;
+	float P_part = err;
+	float I_part = (old_I_part + err);
+	if(I_part >= 500/0.2) I_part = 500/0.2;
+	old_I_part = I_part;
+	float pwm =  200*P_part + 0.2*I_part;
+
+	if(pwm >= 999) pwm = 998;
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 999-pwm);
+}
+
 void user_main(){
 	led_init();
 	led_show(current_temp);
@@ -70,9 +88,11 @@ void user_main(){
 	encoder_register_callback(cmd_callback);
 	temp_sensor_init();
 
-	show_current_temp_callback_timer_id = timer_register_callback(show_curr_temp_callback, 100, 0, TIMER_MODE_REPEAT);
+	show_current_temp_callback_timer_id = timer_register_callback(show_curr_temp_callback, 1000, 0, TIMER_MODE_REPEAT);
 	timer_register_callback(enc_sw_callback, 100, 0, TIMER_MODE_REPEAT);
 
 	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
-	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 900);
+	__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, 999);
+
+	timer_register_callback(voltag_control_cb, 100, 0, TIMER_MODE_REPEAT);
 }
