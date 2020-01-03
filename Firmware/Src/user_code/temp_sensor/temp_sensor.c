@@ -9,7 +9,7 @@
 #include <math.h>
 #include "Src/user_code/timer/timer.h"
 
-#define BETA 	4066.0
+#define BETA 	4096.0
 #define T0		(25+273.15)
 #define R0		(100000.0)
 #define VCC		5.0
