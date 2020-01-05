@@ -1,5 +1,5 @@
 # Simple temperature PID control project
-This is a project for Application Electronic cource at my university. The purpose of this project is to control temperature of a small heating block with a 12V/40W heater and 100k NTC thermistor. These components are used in a 3D printer at my laboratory.
+This is a project for Application Electronic course at my university. The purpose of this project is to control temperature of a small heating block with a 12V/40W heater and 100k NTC thermistor. These components are used in a 3D printer at my laboratory.
 
 # Usage 
 ## Hardware
