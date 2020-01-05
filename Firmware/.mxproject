@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=E:/Projects/temperature-controller/Firmware/Inc
+HeaderPath=E:/Projects/temperature_controller/Firmware/Inc
 HeaderFiles=gpio.h;adc.h;sys.h;tim.h;usart.h;stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;
-SourcePath=E:/Projects/temperature-controller/Firmware/Src
+SourcePath=E:/Projects/temperature_controller/Firmware/Src
 SourceFiles=gpio.c;adc.c;sys.c;tim.c;usart.c;stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

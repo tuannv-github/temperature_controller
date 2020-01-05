@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -48,17 +48,17 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LED_C_Pin|LED_D_Pin|LED_E_Pin|LED_F_Pin 
-                          |LED_G_Pin|LED_DP_Pin|LED_0_Pin|BUZZER_Pin 
+                          |LED_G_Pin|LED_DP_Pin|LED_2_Pin|BUZZER_Pin 
                           |LED_A_Pin|LED_B_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_3_Pin|LED_2_Pin|LED_1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_0_Pin|LED_3_Pin|LED_1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin 
                            PBPin PBPin PBPin PBPin 
                            PBPin PBPin */
   GPIO_InitStruct.Pin = LED_C_Pin|LED_D_Pin|LED_E_Pin|LED_F_Pin 
-                          |LED_G_Pin|LED_DP_Pin|LED_0_Pin|BUZZER_Pin 
+                          |LED_G_Pin|LED_DP_Pin|LED_2_Pin|BUZZER_Pin 
                           |LED_A_Pin|LED_B_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -66,7 +66,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PAPin PAPin PAPin */
-  GPIO_InitStruct.Pin = LED_3_Pin|LED_2_Pin|LED_1_Pin;
+  GPIO_InitStruct.Pin = LED_0_Pin|LED_3_Pin|LED_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
